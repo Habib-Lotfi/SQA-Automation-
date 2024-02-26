@@ -12,10 +12,18 @@ import os
 
 #  To be as incognito in the browser
 firefox_options = Options()
-firefox_options.add_argument("--incognito")
+# firefox_options.add_argument("--incognito")
+# to have a privet browsing instead of incognito:
+firefox_options.set_preference("browser.privatebrowsing.autostart", True)
+
+firefox_options.add_argument("--headless")
+
 
 # driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
-driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install(),options=firefox_options))
+driver = webdriver.Firefox(
+    service=FirefoxService(GeckoDriverManager().install()), options=firefox_options
+)
+
 
 driver.get("https://www.yahoo.com")
 sleep(2)
