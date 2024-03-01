@@ -8,24 +8,40 @@ from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.firefox import GeckoDriverManager
 from time import sleep
 
-
-
-
-driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
 base_url = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
-driver.get(base_url)
-driver.implicitly_wait(3)
 
-login = Login(driver)
-mainPage = MainPage(driver)
 
-login.enter_username("admin")
-login.enter_password("admin123")
-login.click_on_login_button()
+class LoginTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.driver = webdriver.Firefox(
+            service=FirefoxService(GeckoDriverManager().install())
+        )
+        cls.driver.implicitly_wait(3)
+        cls.driver.maximize_window()
 
-mainPage.check_main_page()
+    def test_valid_login(self):
+        self.driver.get(base_url)
 
-# assert
+        login = Login(self.driver)
+        mainPage = MainPage(self.driver)
 
-sleep(3)
-driver.quit()
+        login.enter_username("admin")
+        login.enter_password("admin123")
+        login.click_on_login_button()
+        mainPage.check_main_page()
+
+        # assert
+
+        sleep(3)
+        # Example assertion to check if the dashboard is displayed
+        self.assertTrue(
+            mainPage.check_main_page(), "Failed to log in or dashboard not found"
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.driver.quit()
+            
+if __name__ == "__main__":
+    unittest.main()

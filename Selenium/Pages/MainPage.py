@@ -8,4 +8,5 @@ class MainPage:
 
     def check_main_page(self):
         # self.driver.find_element("class name",self.dashboard_class)
-        self.driver.find_element("class name", dashboard_class)
+        element = self.driver.find_element("class name", dashboard_class)
+        return element.is_displayed()
